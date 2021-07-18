@@ -1,24 +1,27 @@
-lords = ['Burp', 'Pee', 'Fart', 'Puu']
-input(lords)
-input('INCOMING LORD...')
+places = ['House', 'Bluvvrya', 'Hobewang', 'ArrSeeMarri', 'Bulgaria']
+print(places)
 
-lords.append('Math Blurfer')
-input(lords)
-input("Huh??? No! Get rid of 'it'!!!")
+print()
+print(sorted(places))
+print(places)
 
-tooInsane = 'Math Blurfer'
-lords.remove(tooInsane)
-print(lords)
-input('Ahh, yes. Much better!')
-input(f"\nThe {tooInsane.title()} was banished many commits ago.")
+print()
+print(sorted(places).reverse())
+print(places)
 
-input("Anyways, we are inviting " + str(len(lords)) + " lords now.")
-input(lords)
-input("Well, that's UG-LEH! Let's sort it by alphabetical order.")
-input(sorted(lords))
-poppedLords = lords.pop(0)
-input(lords)
-input("Heh? Wat happened?! Let's put that back in.")
-lords.append(poppedLords)
-input(sorted(lords))
-input('Bye.')
+print()
+places.reverse()
+print(places)
+places.reverse()
+print(places)
+
+print()
+sort(places)
+print(places)
+
+print()
+places.reverse()
+print(places)
+
+print()
+print(str(len(places)))

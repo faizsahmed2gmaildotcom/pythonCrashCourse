@@ -1,4 +1,2 @@
-name = "The Burp God"
-print(name.rstrip())
-print(name.lstrip())
-print(name.strip())
+name = "\n Fart \t Dev"
+print(name)
