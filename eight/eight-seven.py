@@ -9,3 +9,5 @@ def makeAlbum(artistName, albumTitle):
 nameInput = input("Artist name?")
 albumInput = input("Album title?")
 makeAlbum(str(nameInput), str(albumInput))
+
+# test
