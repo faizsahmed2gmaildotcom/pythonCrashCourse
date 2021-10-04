@@ -283,4 +283,5 @@ while userState == 'n':
     latestBusFunction()
     queryOfTheUser()
 
-print(f"The latest bus was Bus {currentLatestBusLetter} on week {currentLatestBusWeek}.")
+print(f"The latest bus was Bus {currentLatestBusLetter} on week {currentLatestBusWeek} with a maximum late time of "
+      f"{currentLatestBusNumber}")
