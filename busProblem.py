@@ -186,6 +186,7 @@ while userState == 'n':
 
 
     currentLatestBusNumber = 0
+    currentLatestBusWeek = 'null'
     currentLatestBusLetter = 'null'
 
     queryFunction()
@@ -198,10 +199,12 @@ while userState == 'n':
 
     def latestBusFunction():
         global currentLatestBusNumber
+        global currentLatestBusWeek
         global currentLatestBusLetter
         for latestBusFunctionCounter in range(0, len(lateNumbers)):
             if lateNumbers[latestBusFunctionCounter] < currentLatestBusNumber:
                 currentLatestBusNumber = lateNumbers[latestBusFunctionCounter]
+                currentLatestBusWeek = storedWeek
                 currentLatestBusLetter = storedBusLetter
 
 
@@ -280,5 +283,4 @@ while userState == 'n':
     latestBusFunction()
     queryOfTheUser()
 
-print(f"The latest bus was Bus {currentLatestBusLetter} on week {currentLatestBusNumber}.")
-print("Exiting...")
+print(f"The latest bus was Bus {currentLatestBusLetter} on week {currentLatestBusWeek}.")
