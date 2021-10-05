@@ -1,3 +1,4 @@
+# basic program functions
 def week():
     internalWeek = input('Please enter the week (ONLY WORKS WITH WEEK 1):')
     while internalWeek != '1' and internalWeek != '2' and internalWeek != '3' and internalWeek != '4':
@@ -57,15 +58,20 @@ def userConfirm():
 
 userConfirm()
 
-# implement 2D array here
+# use 2D arrays below
+# convert following 6 lines to a 2D array for Week 1
 weekOneA = []
 weekOneB = []
 weekOneC = []
 weekOneD = []
 weekOneE = []
 weekOneF = []
+weekTwo = [[], [], [], [], []]
+weekThree = [[], [], [], [], []]
+weekFour = [[], [], [], [], []]
 userState = 'n'
 
+# main program
 while userState == 'n':
     def weekChecker():
         if storedBusLetter == 'a':
@@ -104,11 +110,25 @@ while userState == 'n':
 
     for weekCounter in range(0, 5):
         storedValue = 0
+        weekCounterDay = 'null'
+        if weekCounter == 0:
+            weekCounterDay = 'Monday'
+        elif weekCounter == 1:
+            weekCounterDay = 'Tuesday'
+        elif weekCounter == 2:
+            weekCounterDay = 'Wednesday'
+        elif weekCounter == 3:
+            weekCounterDay = 'Thursday'
+        elif weekCounter == 4:
+            weekCounterDay = 'Friday'
+        else:
+            print("An error has occurred in the 'weekCounter' for loop.")
+
         while True:
             try:
                 storedValue = int(input(
-                    f'Please enter how many minutes early (+) / late (-) Bus {storedBusLetter.title()} was on Day '
-                    f'{weekCounter + 1}:'))
+                    f'Please enter how many minutes early (+) / late (-) Bus {storedBusLetter.title()} was on '
+                    f'{weekCounterDay}:'))
             except ValueError:
                 print("Please input a number.")
                 continue
@@ -120,23 +140,28 @@ while userState == 'n':
             printList(storedBusLetter, storedWeek)
         elif storedBusLetter == 'b':
             weekChecker().append(storedValue)
+            printList(storedBusLetter, storedWeek)
         elif storedBusLetter == 'c':
             weekChecker().append(storedValue)
+            printList(storedBusLetter, storedWeek)
         elif storedBusLetter == 'd':
             weekChecker().append(storedValue)
+            printList(storedBusLetter, storedWeek)
         elif storedBusLetter == 'e':
             weekChecker().append(storedValue)
+            printList(storedBusLetter, storedWeek)
         elif storedBusLetter == 'f':
             weekChecker().append(storedValue)
+            printList(storedBusLetter, storedWeek)
         else:
-            print("The program has run ino an error in the 'weekCounter' function. Please try again.")
+            print("The program has run into an error in the 'weekCounter' function. Please try again.")
 
 
     def editQueryFunction():
-        editQuery = input(f"Would you like to edit anything from Week {storedWeek}? (yes / no)")
-        while editQuery != 'yes' and editQuery != 'no':
+        editQuery = input(f"Would you like to edit anything from Week {storedWeek}? (y / n)")
+        while editQuery != 'y' and editQuery != 'n':
             print('Invalid input! Please try again:')
-            editQuery = input(f"Would you like to edit anything from Week {storedWeek}? (yes / no)")
+            editQuery = input(f"Would you like to edit anything from Week {storedWeek}? (y / n)")
         print('Valid value entered.')
         return editQuery
 
@@ -146,7 +171,7 @@ while userState == 'n':
 
     def queryFunction():
         newNumberInput = int(0)
-        if queryEdit == 'yes':
+        if queryEdit == 'y':
             dayChange = day()
             while True:
                 try:
@@ -169,7 +194,7 @@ while userState == 'n':
             else:
                 print("The program has run into an error. Please try again.")
 
-            continueQuery = input('Continue? (y / n)')
+            continueQuery = input('Would you like to edit another value? (y / n)')
             if continueQuery != 'y' and continueQuery != 'n':
                 print('Please try again.')
                 queryFunction()
@@ -180,7 +205,7 @@ while userState == 'n':
                 printList(storedBusLetter, storedWeek)
             else:
                 print('The program has run into an error. Please restart.')
-        elif queryEdit == 'no':
+        elif queryEdit == 'n':
             print("Thank you for using this service.")
             printList(storedBusLetter, storedWeek)
 
@@ -244,9 +269,13 @@ while userState == 'n':
 
     def averageLateChecker():
         lateTotal = 0
+        lateAverage = 0
         for averageLateCheckerCounter in range(0, len(lateNumbers)):
             lateTotal += lateNumbers[averageLateCheckerCounter]
-        lateAverage = lateTotal / len(lateNumbers)
+        try:
+            lateAverage = lateTotal / len(lateNumbers)
+        except ZeroDivisionError:
+            print(f"Bus {storedBusLetter.title()} was not late this week.")
         return round(lateAverage)
 
 
@@ -268,6 +297,7 @@ while userState == 'n':
         userQueryAgainOfTheUser = input("Would you like to enter data for a different week? (y / n)")
         if userQueryAgainOfTheUser != 'y' and userQueryAgainOfTheUser != 'n':
             print("Invalid input. Please try again.")
+            queryOfTheUser()
         elif userQueryAgainOfTheUser == 'y':
             global storedWeek
             global storedBusLetter
@@ -283,5 +313,40 @@ while userState == 'n':
     latestBusFunction()
     queryOfTheUser()
 
-print(f"The latest bus was Bus {currentLatestBusLetter.title()} on week {currentLatestBusWeek} with a maximum late time of "
-      f"{currentLatestBusNumber}")
+print(
+    f"The latest bus was Bus {currentLatestBusLetter.title()} on Week {currentLatestBusWeek} with a maximum late "
+    f"time of {currentLatestBusNumber}")
+
+userAnalysisUserState = 'y'
+
+
+def userAnalysis(userAnalysisDay, userAnalysisBus):
+    userAnalysisLateNumber = 0
+    if userAnalysisDay == 'mon':
+        userAnalysisLateNumber = weekChecker()[0]
+    elif userAnalysisDay == 'tue':
+        userAnalysisLateNumber = weekChecker()[1]
+    elif userAnalysisDay == 'wed':
+        userAnalysisLateNumber = weekChecker()[2]
+    elif userAnalysisDay == 'thu':
+        userAnalysisLateNumber = weekChecker()[3]
+    elif userAnalysisDay == 'fri':
+        userAnalysisLateNumber = weekChecker()[4]
+    else:
+        print("The program has run into an error at the 'userAnalysis' function.")
+    if userAnalysisLateNumber >= 0:
+        print(f"Bus {userAnalysisBus.title()} was not late on {userAnalysisDay.title()}!")
+    elif userAnalysisDay < 0:
+        print(
+            f"Bus {userAnalysisBus.title()} was {userAnalysisLateNumber * -1} minutes late on {userAnalysisDay.title()}.")
+    else:
+        print("Impossible error has been made...")
+
+
+while userAnalysisUserState == 'y':
+    userAnalysis(day(), bus())
+    userAnalysisUserState = input('Would you like to input another value? (y / n)')
+    if userAnalysisUserState != 'n' and userAnalysisUserState != 'y':
+        print("Please enter 'y' / 'n'")
+    elif userAnalysisUserState == 'n':
+        break
