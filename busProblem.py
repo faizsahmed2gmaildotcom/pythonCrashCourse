@@ -336,17 +336,25 @@ def userAnalysis(userAnalysisDay, userAnalysisBus):
         print("The program has run into an error at the 'userAnalysis' function.")
     if userAnalysisLateNumber >= 0:
         print(f"Bus {userAnalysisBus.title()} was not late on {userAnalysisDay.title()}!")
-    elif userAnalysisDay < 0:
+    elif userAnalysisLateNumber < 0:
         print(
             f"Bus {userAnalysisBus.title()} was {userAnalysisLateNumber * -1} minutes late on {userAnalysisDay.title()}.")
     else:
-        print("Impossible error has been made...")
+        print("Impossible error has been made... ¯\_ (ツ)_/¯")
 
 
-while userAnalysisUserState == 'y':
+while userAnalysisUserState != 'n':
     userAnalysis(day(), bus())
     userAnalysisUserState = input('Would you like to input another value? (y / n)')
     if userAnalysisUserState != 'n' and userAnalysisUserState != 'y':
-        print("Please enter 'y' / 'n'")
+        print("Please enter: y / n")
     elif userAnalysisUserState == 'n':
         break
+print('bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye '
+      'bye bye bye bye bye bye bye bya bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye '
+      'bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye '
+      'bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye '
+      'bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye '
+      'bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye '
+      'bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye')
+print('There is 1 mistake in here... GL lol')
