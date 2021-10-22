@@ -53,7 +53,7 @@ def userConfirm():
             'letter': 'Bus Letter: ' + str(storedBusLetter.title()),
         }
     else:
-        print('Values registered.')
+        print(f'Values registered.')
 
 
 userConfirm()
@@ -350,11 +350,3 @@ while userAnalysisUserState != 'n':
         print("Please enter: y / n")
     elif userAnalysisUserState == 'n':
         break
-print('bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye '
-      'bye bye bye bye bye bye bye bya bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye '
-      'bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye '
-      'bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye '
-      'bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye '
-      'bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye '
-      'bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye bye')
-print('There is 1 mistake in here... GL lol')
