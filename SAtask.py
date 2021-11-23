@@ -6,6 +6,7 @@ maxCoachCapacity = 80
 maxCapacity = [480, 480, 480, 480, 480, 480, 480, 640]
 remainingSeats = [480, 480, 480, 480, 480, 480, 480, 640]
 moneyTaken = [0, 0, 0, 0, 0, 0, 0, 0]
+saveData = []
 userGroupAmount = 999
 discountedPeople = 0
 currentPeopleCounter = 0
@@ -16,6 +17,8 @@ mostPassengers = 0
 currentTime = 0
 currentNumber = 0
 totalUserMoney = 0
+userPurchaseLeaveTime = 0
+userPurchaseReturnTime = 0
 
 
 def takenSeats(pos):
@@ -41,31 +44,18 @@ def naeem():
     return a
 
 
-# task 3 function
 def updateTrain():
     global currentNumber
     global mostPassengers
     global mostPassengersTrain
     global remainingSeats
+    global saveData
     currentTimes = []
     for i in range(8):
         if (mostPassengers == (remainingSeats[i] - maxCapacity[i]) * -1) and (remainingSeats[i] != maxCapacity[i]):
             currentNumber = fetchTakenSeats(i)
-            currentTimes.append(i)
-            if len(currentTimes) == 1:
-                mostPassengersTrain = f"{currentTimes[0] + 9}:00"
-            elif len(currentTimes) == 2:
-                mostPassengersTrain = f"{currentTimes[0] + 9}:00 & {currentTimes[1] + 9}:00"
-            elif len(currentTimes) == 3:
-                mostPassengersTrain = f"{currentTimes[0] + 9}:00 & {currentTimes[1] + 9}:00 & {currentTimes[2] + 9}"
-            elif len(currentTimes) == 4:
-                mostPassengersTrain = f"{currentTimes[0] + 9}:00 & {currentTimes[1] + 9}:00 & {currentTimes[2] + 9}:00 & {currentTimes[3] + 9}:00"
-            elif len(currentTimes) == 5:
-                mostPassengersTrain = f"{currentTimes[0] + 9}:00 & {currentTimes[1] + 9}:00 & {currentTimes[2] + 9}:00 & {currentTimes[3] + 9}:00 & {currentTimes[4] + 9}:00"
-            elif len(currentTimes) == 6:
-                mostPassengersTrain = f"{currentTimes[0] + 9}:00 & {currentTimes[1] + 9}:00 & {currentTimes[2] + 9}:00 & {currentTimes[3] + 9}:00 & {currentTimes[4] + 9}:00 & {currentTimes[5] + 9}:00"
-            else:
-                mostPassengersTrain = f"{currentTimes[0] + 9}:00 & {currentTimes[1] + 9}:00 & {currentTimes[2] + 9}:00 & {currentTimes[3] + 9}:00 & {currentTimes[4] + 9}:00 & {currentTimes[5] + 9}:00 & {currentTimes[6] + 9}"
+            currentTimes.append(str(i + 9))
+            mostPassengersTrain = ':00 & '.join(currentTimes)
         elif (fetchTakenSeats(i)) > currentNumber:
             currentNumber = fetchTakenSeats(i)
             mostPassengers = fetchTakenSeats(i)
@@ -76,6 +66,9 @@ while True:
     devMode = str(input("Enable Developer Mode? ('true' / 'false')"))
     if devMode == 'true' or devMode == 'false':
         break
+
+
+# task 3 function
 
 
 def currentCapacity():
@@ -142,10 +135,11 @@ def printTable(printMoney):
             f"| Passengers | {(currentCapacity() * -1) + 4000}{seatsDigitChecker((currentCapacity() * -1) + 4000)}")
         print('-------------------------------------------')
         print(f"| Most Passengers")
-        print(f"| Train: {mostPassengersTrain}")
+        print(f"| Train: {mostPassengersTrain}:00")
         print(f"| Passengers: {mostPassengers}")
         print('-------------------------------------------')
     print(f"Your Total | ${totalUserMoney}{moneyDigitChecker(totalUserMoney)}|")
+    print(f"Your Buses | {':00 & '.join(set(saveData))}:00 |")
     print('-------------------------------------------')
     print(f"")
 
@@ -207,6 +201,8 @@ def capacityChecker(time, groupAmount):
 def purchaseTicket():
     global userPurchaseTicketConfirm
     global currentTime
+    global userPurchaseLeaveTime
+    global userPurchaseReturnTime
     purchaseTicketAmount()
     printTable(devMode)
     userPurchaseLeaveTime = 0
@@ -226,6 +222,7 @@ def purchaseTicket():
         purchaseTicket()
     subtractRemainingSeats(userPurchaseLeaveTime, userGroupAmount)
     updateMoneyTaken(userPurchaseLeaveTime, userGroupAmount)
+    saveData.append(str(userPurchaseLeaveTime))
     printTable(devMode)
 
     userPurchaseReturnTime = 0
@@ -244,6 +241,7 @@ def purchaseTicket():
         purchaseTicket()
     subtractRemainingSeats(userPurchaseReturnTime, userGroupAmount)
     updateMoneyTaken(userPurchaseReturnTime, userGroupAmount)
+    saveData.append(str(userPurchaseReturnTime))
     printTable(devMode)
     while True:
         userPurchaseTicketConfirm = input("Would you like to purchase more tickets? ('yes' / 'no')")
@@ -255,4 +253,11 @@ while True:
     purchaseTicket()
     if userPurchaseTicketConfirm.lower() == 'no':
         totalUserMoney = 0
+        userPurchaseReturnTime = 0
+        userPurchaseLeaveTime = 0
+        saveData = []
         print("Please allow the next user to purchase tickets.\n")
+    if sum(remainingSeats) == 0:
+        print("There are no more seats remaining anywhere!")
+        printTable(devMode)
+        break
