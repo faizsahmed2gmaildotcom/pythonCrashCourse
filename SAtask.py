@@ -195,8 +195,8 @@ def purchaseTicket():
     global userPurchaseLeaveTime
     global userPurchaseReturnTime
     purchaseTicketAmount()
-    userPurchaseLeaveTime = 0
     # leave
+    userPurchaseLeaveTime = 0
     while True:
         userPurchaseLeaveTime = valueError(userPurchaseLeaveTime,
                                            "What time would you like to leave? (9 / 11 / 13 / 15)",
