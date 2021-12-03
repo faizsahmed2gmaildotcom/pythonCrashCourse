@@ -41,7 +41,7 @@ def updateTrain():
     global currentNumber
     global mostPassengers
     global mostPassengersTrain
-    global remainingSeats
+
     currentTimes = []
     for i in range(8):
         if (mostPassengers == (remainingSeats[i] - maxCapacity[i]) * -1) and (remainingSeats[i] != maxCapacity[i]):
@@ -59,25 +59,25 @@ def printTable():
     updateTrain()
 
     timeTable = Tk()
-    timeTable.title('Leave Timetable')
-    timeTable.geometry(f'1500x{str(windowHeight)}')
+    timeTable.title('Train Table')
+    timeTable.geometry(f'1900x{str(windowHeight)}')
 
     sat = ttk.Treeview(timeTable, height=tableHeight)
     sat.pack()
 
     sat['columns'] = ('Leave', '09:00', '11:00', '13:00', '15:00', '', 'Return', '10:00', '12:00', '14:00', '16:00')
     sat.column("#0", width=10, stretch=NO)
-    sat.column("Leave", anchor=CENTER, width=120)
-    sat.column("09:00", anchor=CENTER, width=120)
-    sat.column("11:00", anchor=CENTER, width=120)
-    sat.column("13:00", anchor=CENTER, width=120)
-    sat.column("15:00", anchor=CENTER, width=120)
-    sat.column("", anchor=CENTER, width=120)
-    sat.column("Return", anchor=CENTER, width=120)
-    sat.column("10:00", anchor=CENTER, width=120)
-    sat.column("12:00", anchor=CENTER, width=120)
-    sat.column("14:00", anchor=CENTER, width=120)
-    sat.column("16:00", anchor=CENTER, width=120)
+    sat.column("Leave", anchor=CENTER, width=170)
+    sat.column("09:00", anchor=CENTER, width=170)
+    sat.column("11:00", anchor=CENTER, width=170)
+    sat.column("13:00", anchor=CENTER, width=170)
+    sat.column("15:00", anchor=CENTER, width=170)
+    sat.column("", anchor=CENTER, width=170)
+    sat.column("Return", anchor=CENTER, width=170)
+    sat.column("10:00", anchor=CENTER, width=170)
+    sat.column("12:00", anchor=CENTER, width=170)
+    sat.column("14:00", anchor=CENTER, width=170)
+    sat.column("16:00", anchor=CENTER, width=170)
 
     sat.heading("#0", text="", anchor=CENTER)
     sat.heading("Leave", text="Leave", anchor=CENTER)
@@ -106,7 +106,8 @@ def printTable():
                        'Money',
                        f'${moneyTaken[1]}', f'${moneyTaken[3]}', f'${moneyTaken[5]}', f'${moneyTaken[7]}'))
         sat.insert(parent='', index='end', iid='3', text='',
-                   values=('',))
+                   values=('----------------------------------------', '----------------------------------------',
+                           '----------------------------------------'))
         sat.insert(parent='', index='end', iid='4', text='',
                    values=('Most-Passengers', f'Train', 'Passengers'))
         sat.insert(parent='', index='end', iid='5', text='',
@@ -114,7 +115,8 @@ def printTable():
 
         # totals (task 3)
         sat.insert(parent='', index='end', iid='7', text='',
-                   values=('',))
+                   values=('----------------------------------------', '----------------------------------------',
+                           '----------------------------------------'))
         sat.insert(parent='', index='end', iid='8', text='',
                    values=('Totals', 'Money', 'Passengers'))
         sat.insert(parent='', index='end', iid='9', text='',
@@ -122,7 +124,8 @@ def printTable():
 
     # user data (task 3)
     sat.insert(parent='', index='end', iid='10', text='',
-               values=('',))
+               values=('----------------------------------------', '----------------------------------------',
+                       '----------------------------------------'))
     sat.insert(parent='', index='end', iid='11', text='Your Totals',
                values=('Your-Data',))
     sat.insert(parent='', index='end', iid='12', text='',
@@ -193,6 +196,7 @@ def purchaseTicket():
     global userPurchaseReturnTime
     purchaseTicketAmount()
     userPurchaseLeaveTime = 0
+    # leave
     while True:
         userPurchaseLeaveTime = valueError(userPurchaseLeaveTime,
                                            "What time would you like to leave? (9 / 11 / 13 / 15)",
@@ -202,15 +206,11 @@ def purchaseTicket():
                  (userPurchaseLeaveTime == 13) or (userPurchaseLeaveTime == 15))) and (
                 capacityChecker(userPurchaseLeaveTime, userGroupAmount) == 'true'):
             break
-    currentTime = userPurchaseLeaveTime
-    if capacityChecker(userPurchaseLeaveTime, userGroupAmount) == 'false':
-        print(f"There is not enough space left in the {userPurchaseLeaveTime - 9}:00 train!")
-        purchaseTicket()
-    subtractRemainingSeats(userPurchaseLeaveTime, userGroupAmount)
-    updateMoneyTaken(userPurchaseLeaveTime, userGroupAmount)
-    saveData.append(str(userPurchaseLeaveTime))
+        if capacityChecker(userPurchaseLeaveTime, userGroupAmount) == 'false':
+            print(f"There is not enough space left in the {userPurchaseLeaveTime - 9}:00 train!")
+            purchaseTicket()
 
-    printTable()
+    # return
     userPurchaseReturnTime = 0
     while True:
         userPurchaseReturnTime = valueError(userPurchaseReturnTime,
@@ -218,23 +218,30 @@ def purchaseTicket():
                                             "Please enter: 10 / 12 / 14 / 16: ")
         if ((userPurchaseReturnTime == 10) or (userPurchaseReturnTime == 12) or (userPurchaseReturnTime == 14) or (
                 userPurchaseReturnTime == 16)) and (
-                capacityChecker(userPurchaseReturnTime, userGroupAmount) == 'true'):
+                capacityChecker(userPurchaseReturnTime, userGroupAmount) == 'true') and (
+                userPurchaseLeaveTime < userPurchaseReturnTime):
             break
+        if capacityChecker(userPurchaseReturnTime, userGroupAmount) == 'false':
+            print(f"There is not enough space left in the {userPurchaseReturnTime - 9}:00 train!")
+            purchaseTicket()
+        if userPurchaseLeaveTime > userPurchaseReturnTime:
+            print("You cannot stay overnight!")
     currentTime = userPurchaseReturnTime
-    if capacityChecker(userPurchaseReturnTime, userGroupAmount) == 'false':
-        print(f"There is not enough space left in the {userPurchaseReturnTime - 9}:00 train!")
-        purchaseTicket()
     subtractRemainingSeats(userPurchaseReturnTime, userGroupAmount)
     updateMoneyTaken(userPurchaseReturnTime, userGroupAmount)
     saveData.append(str(userPurchaseReturnTime))
+    subtractRemainingSeats(userPurchaseLeaveTime, userGroupAmount)
+    updateMoneyTaken(userPurchaseLeaveTime, userGroupAmount)
+    saveData.append(str(userPurchaseLeaveTime))
     printTable()
+
     while True:
         userPurchaseTicketConfirm = input("Would you like to purchase more tickets? ('yes' / 'no')")
         if userPurchaseTicketConfirm.lower() == 'yes' or userPurchaseTicketConfirm.lower() == 'no':
             break
 
 
-# developer mode program
+# developer mode
 while True:
     print("Enable Developer Mode to run as an Administrator. Disable Developer Mode to run the program as a user.")
     print("IMPORTANT: DATA TABLE WILL OPEN IN A NEW WINDOW\n")
@@ -274,6 +281,7 @@ while True:
                 userExit = input("Exit program? ('yes' / 'no')")
                 if userExit == 'yes':
                     exit(print("Exiting program..."))
+                    printTable()
                 elif userExit == 'no':
                     break
         print("Please allow the next user to purchase tickets.\n")
