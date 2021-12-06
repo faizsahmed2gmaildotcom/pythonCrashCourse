@@ -177,7 +177,7 @@ def purchaseTicketAmount():
     printTable()
     userGroupAmount = 99
     # exits program if there are no more seats available anywhere
-    if sum(remainingSeats) - sum(maxCapacity) == 0:
+    if sum(remainingSeats) - 160 == 0:
         print("There are no more tickets available today!")
         printTable()
         exit()
