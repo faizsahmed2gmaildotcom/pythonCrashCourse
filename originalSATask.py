@@ -21,6 +21,7 @@ userPurchaseTicketConfirm = ''
 mostPassengersTrain = ''
 
 
+# returns the remaining seats while checking its capacity
 def remainingSeatsChecker(pos):
     if remainingSeats[pos] == 0:
         return 'Closed'
@@ -28,11 +29,12 @@ def remainingSeatsChecker(pos):
         return remainingSeats[pos]
 
 
+# returns the raw value of the remaining seats by inputting the time number (9, 12, 13, etc.)
 def takenSeats(variable):
     return maxCapacity[variable] - remainingSeats[variable]
 
 
-# task 3 function
+# task 3 function - updates the train(s) with the most passengers
 def updateTrain():
     global currentNumber
     global mostPassengers
@@ -50,6 +52,7 @@ def updateTrain():
             mostPassengersTrain = i + 9
 
 
+# used to format the "printTable" function
 def seatsDigitChecker(variable):
     if variable == 0:
         return ''
@@ -63,6 +66,7 @@ def seatsDigitChecker(variable):
         return '  '
 
 
+# used to format the "printTable" function
 def moneyDigitChecker(variable):
     if variable < 10:
         return '    '
@@ -74,12 +78,13 @@ def moneyDigitChecker(variable):
         return ' '
 
 
-# task 1 function
+# task 1 function - prints the data table
 def printTable():
     updateTrain()
 
     print(f"")
     print('-------------------------------------------')
+    # leave times
     print(f"| Leave  | 09:00  | 11:00 | 13:00 | 15:00 |")
     print(
         f"| Seats  | {remainingSeatsChecker(0)}{seatsDigitChecker(remainingSeats[0])} | {remainingSeatsChecker(2)}{seatsDigitChecker(remainingSeats[2])}| {remainingSeatsChecker(4)}{seatsDigitChecker(remainingSeats[4])}| {remainingSeatsChecker(6)}{seatsDigitChecker(remainingSeats[6])}|")
@@ -87,6 +92,7 @@ def printTable():
         print(
             f"| Money  | ${moneyTaken[0]}{moneyDigitChecker(moneyTaken[0])} | ${moneyTaken[2]}{moneyDigitChecker(moneyTaken[2])}| ${moneyTaken[4]}{moneyDigitChecker(moneyTaken[4])}| ${moneyTaken[6]}{moneyDigitChecker(moneyTaken[6])}|")
     print('-------------------------------------------')
+    # return times
     print(f"| Return | 10:00  | 12:00 | 14:00 | 16:00 |")
     print(
         f"| Seats  | {remainingSeatsChecker(1)}{seatsDigitChecker(remainingSeats[1])} | {remainingSeatsChecker(3)}{seatsDigitChecker(remainingSeats[3])}| {remainingSeatsChecker(5)}{seatsDigitChecker(remainingSeats[5])}| {remainingSeatsChecker(7)}{seatsDigitChecker(remainingSeats[7])}|")
@@ -95,6 +101,7 @@ def printTable():
             f"| Money  | ${moneyTaken[1]}{moneyDigitChecker(moneyTaken[1])} | ${moneyTaken[3]}{moneyDigitChecker(moneyTaken[3])}| ${moneyTaken[5]}{moneyDigitChecker(moneyTaken[5])}| ${moneyTaken[7]}{moneyDigitChecker(moneyTaken[7])}|")
     print('-------------------------------------------')
     if devMode == 'true':
+        # task 3 data
         print(f"             | Total")
         print(f"| Money      | ${sum(moneyTaken)}{moneyDigitChecker(sum(moneyTaken))} ")
         print(
@@ -104,6 +111,7 @@ def printTable():
         print(f"| Train: {mostPassengersTrain}:00")
         print(f"| Passengers: {mostPassengers}")
         print('-------------------------------------------')
+    # user-specific data
     print(f"Your Total | ${totalUserMoney}{moneyDigitChecker(totalUserMoney)}|")
     print(f"Selected Buses | {':00 & '.join(set(saveData))}:00 |")
     print('-------------------------------------------')
@@ -122,11 +130,13 @@ def valueError(returnValue, inputMessage, returnMessage):
             return returnValue
 
 
+# subtracts the number of seats remaining in a bus
 def subtractRemainingSeats(schedule, seats):
     global remainingSeats
     remainingSeats[schedule - 9] -= seats
 
 
+# subtracts the money earned from a bus
 def updateMoneyTaken(schedule, groupAmount):
     global discountedPeople
     global totalUserMoney
@@ -136,11 +146,13 @@ def updateMoneyTaken(schedule, groupAmount):
     totalUserMoney += moneyTaken[schedule - 9]
 
 
+# used to obtain the desired number of tickets to purchase from the user
 def purchaseTicketAmount():
     global userGroupAmount
     printTable()
     userGroupAmount = 99
-    if sum(remainingSeats) - 160 == 0:
+    # exits program if there are no more seats available anywhere
+    if sum(remainingSeats) - sum(maxCapacity) == 0:
         print("There are no more tickets available today!")
         printTable()
         exit()
@@ -150,6 +162,7 @@ def purchaseTicketAmount():
             print('Please input a number from 1-80.')
 
 
+# checks if the capacity of a train is greater than zero
 def capacityChecker(time, groupAmount):
     if remainingSeats[time - 9] - groupAmount < 0:
         return 'false'
@@ -164,7 +177,7 @@ def purchaseTicket():
     global userPurchaseLeaveTime
     global userPurchaseReturnTime
     purchaseTicketAmount()
-    # leave
+    # user's leave time
     userPurchaseLeaveTime = 0
     while True:
         userPurchaseLeaveTime = valueError(userPurchaseLeaveTime,
@@ -179,7 +192,7 @@ def purchaseTicket():
             print(f"There is not enough space left in the {userPurchaseLeaveTime - 9}:00 train!")
             purchaseTicket()
 
-    # return
+    # user's return time
     userPurchaseReturnTime = 0
     while True:
         userPurchaseReturnTime = valueError(userPurchaseReturnTime,
@@ -195,6 +208,7 @@ def purchaseTicket():
             purchaseTicket()
         if userPurchaseLeaveTime > userPurchaseReturnTime:
             print("You cannot stay overnight!")
+    # updates the variables in the data table here
     currentTime = userPurchaseReturnTime
     subtractRemainingSeats(userPurchaseReturnTime, userGroupAmount)
     updateMoneyTaken(userPurchaseReturnTime, userGroupAmount)
@@ -204,13 +218,14 @@ def purchaseTicket():
     saveData.append(str(userPurchaseLeaveTime))
     printTable()
 
+    # asks user if they would like to purchase more tickets
     while True:
         userPurchaseTicketConfirm = input("Would you like to purchase more tickets? ('yes' / 'no')")
         if userPurchaseTicketConfirm.lower() == 'yes' or userPurchaseTicketConfirm.lower() == 'no':
             break
 
 
-# developer mode
+# loop to enable developer mode to see all data
 while True:
     print("Enable Developer Mode to run as an Administrator. Disable Developer Mode to run the program as a user.")
     devMode = str(input("Enable Developer Mode? ('true' / 'false')"))
@@ -218,11 +233,12 @@ while True:
         break
 
 if devMode == 'true':
+    # if developer mode is to be enabled, the password "iHateSA" must be entered
     while True:
         inputPwd = input("Password: ")
         if pwdCount > 3:
             print(
-                "You have failed too many times! (The Password is in the private comments on the submission in Google Classroom!")
+                "You have failed too many times! (The Password is in the private comments on the submission in Google Classroom!)")
             exit()
         if inputPwd != 'iHateSA':
             print('Incorrect Password! Please try again.')
@@ -239,6 +255,7 @@ while True:
         userPurchaseReturnTime = 0
         saveData = []
 
+        # the user can exit the program if they are a developer
         if devMode == 'true':
             while True:
                 userExit = input("Exit program? ('yes' / 'no')")
@@ -248,7 +265,3 @@ while True:
                 elif userExit == 'no':
                     break
         print("Please allow the next user to purchase tickets.\n")
-    if sum(remainingSeats) == 0:
-        print("There are no more seats remaining.")
-        printTable()
-        break

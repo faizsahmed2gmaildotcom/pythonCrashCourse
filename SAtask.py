@@ -25,6 +25,7 @@ userPurchaseTicketConfirm = ''
 mostPassengersTrain = ''
 
 
+# returns the remaining seats while checking its capacity
 def remainingSeatsChecker(pos):
     if remainingSeats[pos] == 0:
         return 'Closed'
@@ -32,11 +33,12 @@ def remainingSeatsChecker(pos):
         return remainingSeats[pos]
 
 
+# returns the raw value of the remaining seats by inputting the time number (9, 12, 13, etc.)
 def takenSeats(variable):
     return maxCapacity[variable] - remainingSeats[variable]
 
 
-# task 3 function
+# task 3 function - updates the train(s) with the most passengers
 def updateTrain():
     global currentNumber
     global mostPassengers
@@ -54,7 +56,7 @@ def updateTrain():
             mostPassengersTrain = i + 9
 
 
-# task 1 function
+# task 1 function - opens the data table
 def printTable():
     updateTrain()
 
@@ -132,7 +134,7 @@ def printTable():
     sat.insert(parent='', index='end', iid='13', text='',
                values=('Buses', f"{':00 & '.join(set(saveData))}:00"))
 
-    # button
+    # "continue" button
     leaveBtn = Button(timeTable, text="Continue", command=timeTable.destroy)
     leaveBtn.pack()
 
@@ -152,11 +154,13 @@ def valueError(returnValue, inputMessage, returnMessage):
             return returnValue
 
 
+# subtracts the number of seats remaining in a bus
 def subtractRemainingSeats(schedule, seats):
     global remainingSeats
     remainingSeats[schedule - 9] -= seats
 
 
+# subtracts the money earned from a bus
 def updateMoneyTaken(schedule, groupAmount):
     global discountedPeople
     global totalUserMoney
@@ -166,11 +170,13 @@ def updateMoneyTaken(schedule, groupAmount):
     totalUserMoney += moneyTaken[schedule - 9]
 
 
+# used to obtain the desired number of tickets to purchase from the user
 def purchaseTicketAmount():
     global userGroupAmount
     printTable()
     userGroupAmount = 99
-    if sum(remainingSeats) - 160 == 0:
+    # exits program if there are no more seats available anywhere
+    if sum(remainingSeats) - sum(maxCapacity) == 0:
         print("There are no more tickets available today!")
         printTable()
         exit()
@@ -180,6 +186,7 @@ def purchaseTicketAmount():
             print('Please input a number from 1-80.')
 
 
+# checks if the capacity of a train is greater than zero
 def capacityChecker(time, groupAmount):
     if remainingSeats[time - 9] - groupAmount < 0:
         return 'false'
@@ -194,7 +201,7 @@ def purchaseTicket():
     global userPurchaseLeaveTime
     global userPurchaseReturnTime
     purchaseTicketAmount()
-    # leave
+    # user's leave time
     userPurchaseLeaveTime = 0
     while True:
         userPurchaseLeaveTime = valueError(userPurchaseLeaveTime,
@@ -209,7 +216,7 @@ def purchaseTicket():
             print(f"There is not enough space left in the {userPurchaseLeaveTime - 9}:00 train!")
             purchaseTicket()
 
-    # return
+    # user's return time
     userPurchaseReturnTime = 0
     while True:
         userPurchaseReturnTime = valueError(userPurchaseReturnTime,
@@ -225,6 +232,7 @@ def purchaseTicket():
             purchaseTicket()
         if userPurchaseLeaveTime > userPurchaseReturnTime:
             print("You cannot stay overnight!")
+    # updates the variables in the data table here
     currentTime = userPurchaseReturnTime
     subtractRemainingSeats(userPurchaseReturnTime, userGroupAmount)
     updateMoneyTaken(userPurchaseReturnTime, userGroupAmount)
@@ -234,13 +242,14 @@ def purchaseTicket():
     saveData.append(str(userPurchaseLeaveTime))
     printTable()
 
+    # asks user if they would like to purchase more tickets
     while True:
         userPurchaseTicketConfirm = input("Would you like to purchase more tickets? ('yes' / 'no')")
         if userPurchaseTicketConfirm.lower() == 'yes' or userPurchaseTicketConfirm.lower() == 'no':
             break
 
 
-# developer mode
+# loop to enable developer mode to see all data
 while True:
     print("Enable Developer Mode to run as an Administrator. Disable Developer Mode to run the program as a user.")
     print("IMPORTANT: DATA TABLE WILL OPEN IN A NEW WINDOW\n")
@@ -251,11 +260,12 @@ while True:
 if devMode == 'true':
     windowHeight = 320
     tableHeight = 13
+    # if developer mode is to be enabled, the password "iHateSA" must be entered
     while True:
         inputPwd = input("Password: ")
         if pwdCount > 3:
             print(
-                "You have failed too many times! (The Password is in the private comments on the submission in Google Classroom!")
+                "You have failed too many times! (The Password is in the private comments on the submission in Google Classroom!)")
             exit()
         if inputPwd != 'iHateSA':
             print('Incorrect Password! Please try again.')
@@ -275,6 +285,7 @@ while True:
         userPurchaseReturnTime = 0
         saveData = []
 
+        # the user can exit the program if they are a developer
         if devMode == 'true':
             while True:
                 userExit = input("Exit program? ('yes' / 'no')")
@@ -284,7 +295,3 @@ while True:
                 elif userExit == 'no':
                     break
         print("Please allow the next user to purchase tickets.\n")
-    if sum(remainingSeats) == 0:
-        print("There are no more seats remaining.")
-        printTable()
-        break
