@@ -16,8 +16,6 @@ totalUserMoney = 0
 userPurchaseLeaveTime = 0
 userPurchaseReturnTime = 0
 pwdCount = 0
-windowHeight = 0
-tableHeight = 0
 devMode = ''
 userPurchaseTicketConfirm = ''
 mostPassengersTrain = ''
@@ -215,14 +213,11 @@ def purchaseTicket():
 # developer mode
 while True:
     print("Enable Developer Mode to run as an Administrator. Disable Developer Mode to run the program as a user.")
-    print("IMPORTANT: DATA TABLE WILL OPEN IN A NEW WINDOW\n")
     devMode = str(input("Enable Developer Mode? ('true' / 'false')"))
     if (devMode == 'true') or (devMode == 'false'):
         break
 
 if devMode == 'true':
-    windowHeight = 320
-    tableHeight = 13
     while True:
         inputPwd = input("Password: ")
         if pwdCount > 3:
@@ -234,9 +229,6 @@ if devMode == 'true':
             pwdCount += 1
         elif inputPwd == 'iHateSA':
             break
-elif devMode == 'false':
-    windowHeight = 190
-    tableHeight = 6
 
 # main program
 while True:
