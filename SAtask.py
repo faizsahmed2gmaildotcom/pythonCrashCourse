@@ -11,9 +11,6 @@ saveData = []
 userGroupAmount = 999
 discountedPeople = 0
 currentPeopleCounter = 0
-devMode = ''
-userPurchaseTicketConfirm = ''
-mostPassengersTrain = ''
 mostPassengers = 0
 currentTime = 0
 currentNumber = 0
@@ -23,6 +20,9 @@ userPurchaseReturnTime = 0
 pwdCount = 0
 windowHeight = 0
 tableHeight = 0
+devMode = ''
+userPurchaseTicketConfirm = ''
+mostPassengersTrain = ''
 
 
 def remainingSeatsChecker(pos):
