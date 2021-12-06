@@ -122,7 +122,6 @@ def printTable():
         sat.insert(parent='', index='end', iid='9', text='',
                    values=('', f'${sum(moneyTaken)}', (sum(remainingSeats) * -1) + 4000))
 
-    # user data (task 3)
     sat.insert(parent='', index='end', iid='10', text='',
                values=('----------------------------------------', '----------------------------------------',
                        '----------------------------------------'))
