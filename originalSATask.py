@@ -119,6 +119,7 @@ def printTable():
 
 
 # task 2 starts here
+# does not continue program unless the input value is an integer
 def valueError(returnValue, inputMessage, returnMessage):
     while True:
         try:
