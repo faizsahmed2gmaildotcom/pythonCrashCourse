@@ -97,7 +97,6 @@ def attractionInput(days):
     printAttractions(days)
     selectedDay = 0
     while True:
-        # todo: enter first letter only (upper case or lower case)
         attraction = input(
             "Which attraction(s) would you like to do? Just enter the first word of the 'Extra Attraction'! (e.g. penguin) ")
         attraction.lower()
