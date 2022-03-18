@@ -1,3 +1,5 @@
+import math
+
 days = 0
 prevDays = 0
 adultCount = 0
@@ -11,6 +13,9 @@ lionCount = 0
 penguinCount = 0
 eveningCount = 0
 
+
+# TODO: a booking can be made up to a week in advance; show the days available for booking;
+# TODO: allocate a unique booking number
 
 def printTable():
     print('|-------------------------------------------------|--------------|---------------|')
@@ -54,18 +59,6 @@ def attractionInput(days):
     return attraction
 
 
-def groupInputFunction(groupNumber):
-    while True:
-        try:
-            groupNumber = int(input("Please input the number '6' or more, or enter '0'! "))
-        except ValueError:
-            print("Please enter a number!")
-            continue
-        if (groupNumber >= 6) or (groupNumber == 0):
-            break
-    return groupNumber
-
-
 def userSummary(days, attractionLion, attractionPenguin, attractionEvening):
     costMod = 0
     if days == 1:
@@ -73,9 +66,11 @@ def userSummary(days, attractionLion, attractionPenguin, attractionEvening):
     elif days == 2:
         costMod = 1.5
 
+    # task 2
     print('')
+    print(f'|                  Your Summary                   |')
     print(f'|-------------------------------------------------|------------------|')
-    print(f'|                   Ticket Type                   |   {days} day(s)       |')
+    print(f'|                   Ticket Type                   |     {days} Day(s)     |')
     print(f'|-------------------------------------------------|------------------|')
     print(f'|                      Adult                      | Amount: {adultCount}        |')
     print(f'|-------------------------------------------------| Cost: $ {adultCount * 20 * costMod}     |')
@@ -83,16 +78,27 @@ def userSummary(days, attractionLion, attractionPenguin, attractionEvening):
     print(f'|                      Child                      | Amount: {childCount}        |')
     print(f'|-------------------------------------------------| Cost: $ {childCount * 12 * costMod}     |')
     print(f'|-------------------------------------------------|------------------|')
-    print(f'|-------------------------------------------------|------------------|')
     print(f'|                     Senior                      | Amount: {seniorCount}        |')
     print(f'|-------------------------------------------------| Cost: $ {seniorCount * 16 * costMod}     |')
-    print(f'|-------------------------------------------------|------------------|')
     print(f'|-------------------------------------------------|------------------|')
     print(f'|                     Family                      | Amount: {familyCount}        |')
     print(f'|-------------------------------------------------| Cost: $ {familyCount * 60 * costMod}     |')
     print(f'|-------------------------------------------------|------------------|')
     print(f'|                      Group                      | Amount: {groupCount}        |')
     print(f'|-------------------------------------------------| Cost: $ {groupCount * 15 * costMod}     |')
+    print(f'|-------------------------------------------------|------------------|')
+    print('')
+    print(f'|-------------------------------------------------|------------------|')
+    print(f'|                 Attraction Type                 |   {days} day(s)       |')
+    print(f'|-------------------------------------------------|------------------|')
+    print(f'|                  Lion Feeding                   | Amount: {attractionLion}       |')
+    print(f'|-------------------------------------------------| Cost: $ {attractionLion * 2.5}     |')
+    print(f'|-------------------------------------------------|------------------|')
+    print(f'|                 Penguin Feeding                 | Amount: {attractionPenguin}       |')
+    print(f'|-------------------------------------------------| Cost: $ {attractionPenguin * 2}     |')
+    print(f'|-------------------------------------------------|------------------|')
+    print(f'|                Evening Barbecue                 | Amount: {attractionEvening}       |')
+    print(f'|-------------------------------------------------| Cost: $ {attractionEvening * 5}     |')
     print(f'|-------------------------------------------------|------------------|')
     print('')
 
@@ -142,18 +148,86 @@ def attractionAmount(attraction):
             break
 
 
+def YorN(text):
+    while True:
+        returnValue = input(text)
+        returnValue.lower()
+        if (returnValue == 'y') or (returnValue == 'n'):
+            return returnValue
+
+
 def askAttraction():
     global days
     while True:
         attractionAsk = input("Would you like to do extra attractions? ('y' / 'n') ")
+        attractionAsk.lower()
         if attractionAsk == 'y':
-            while True:
-                userAttraction = attractionInput(days)
-                attractionAmount(userAttraction)
-                askAttraction()
-                break
+            userAttraction = attractionInput(days)
+            attractionAmount(userAttraction)
         elif attractionAsk == 'n':
             break
+
+
+# task 3
+def simplify(adult, child, senior, family, groupAdult, groupSenior, groupChild):
+    global adultCount
+    global childCount
+    global seniorCount
+    global familyCount
+    global groupCount
+    adultSeniorMath = math.floor((adult + senior) / 2)
+    childMath = math.floor(child / 3)
+
+    # family simplification
+    if ((adult + senior) >= 2) and (child >= 3):
+        familyConvertQuery = YorN(
+            f"Would you like to buy Family Ticket(s) instead of {adult} Adult, {senior} Senior, and {child} Children tickets? ('y' / 'n') ")
+        if familyConvertQuery == 'y':
+            if adultSeniorMath <= childMath:
+                familyConvertAmount = adultSeniorMath
+            else:
+                familyConvertAmount = childMath
+            for b in range(familyConvertAmount):
+                if child >= 3:
+                    child -= 3
+                else:
+                    break
+                if adult >= 2:
+                    adult -= 2
+                elif senior >= 2:
+                    senior -= 2
+                else:
+                    break
+                family += 1
+
+    # group simplification
+    if (senior != 4) or (child != 2):
+        if ((adult + senior) >= 6) and (childMath < adultSeniorMath):
+            groupConvertQuery = YorN(
+                f"Would you like to buy Group Ticket(s) instead of {adult} Adults and {senior} Senior tickets? ('y' / 'n') ")
+            if groupConvertQuery == 'y':
+                while True:
+                    adultSeniorMath = math.floor((adult + senior) / 2)
+                    childMath = math.floor(child / 3)
+                    if childMath >= adultSeniorMath:
+                        break
+                    if adult > 0:
+                        adult -= 1
+                    elif senior > 0:
+                        senior -= 1
+                    groupCount += 1
+
+    adultCount = adult
+    childCount = child
+    seniorCount = senior
+    familyCount = family
+
+
+#           elif groupConvertQuery == 'n':
+#               adultCount -= groupAdult
+#               seniorCount -= groupSenior
+#               childCount -= groupChild
+#               groupCount += (groupAdult + groupSenior + groupChild)
 
 
 def userInputChecker(repeat):
@@ -168,11 +242,9 @@ def userInputChecker(repeat):
     global lionCount
     global penguinCount
     global eveningCount
-
-    if repeat:
-        days = prevDays
-    else:
-        days = 0
+    groupAdultCount = 0
+    groupSeniorCount = 0
+    groupChildCount = 0
 
     printTable()
     if not repeat:
@@ -181,25 +253,40 @@ def userInputChecker(repeat):
         seniorCount += intChecker("For how many seniors? ")
         childCount += rangeIntChecker("For how many children? ", 0, (adultCount + seniorCount) * 2)
         familyCount += intChecker("How many family tickets? ")
-        groupCount += intChecker("How many people would you like in your group? (Enter '0' for no group!) ")
+        groupQuery = YorN("Would you like to create a Group ticket? ('y' / 'n') ")
     else:
+        days = prevDays
         adultCount += intChecker("For how many more adults? ")
         seniorCount += intChecker("For how many more seniors? ")
         childCount += rangeIntChecker("For how many more children? ", 0, (adultCount + seniorCount) * 2)
         familyCount += intChecker("How many more family tickets? ")
-        groupCount += intChecker("How many more people would you like in your group? (Enter '0' for no group!) ")
-    if groupCount != 0:
-        groupCount = groupInputFunction(groupCount)
+        groupQuery = YorN("Would you like add to your create a Group ticket? ('y' / 'n') ")
+
+    if groupQuery == 'y':
+        while True:
+            groupAdultCount = intChecker("Group with how many adults? ")
+            groupSeniorCount = intChecker("Group with how many seniors? ")
+            groupChildCount = rangeIntChecker("Group with how many children? ", 0, (adultCount + seniorCount) * 2)
+            groupTotal = groupAdultCount + groupSeniorCount + groupChildCount
+            if groupTotal < 6:
+                print(f"Group tickets must have at least 6 people in them! You have {groupTotal}.")
+            else:
+                break
+        adultCount += groupAdultCount
+        seniorCount += groupSeniorCount
+        childCount += groupChildCount
 
     askAttraction()
 
     while True:
-        moreInput = input("Would you like to buy tickets for anyone else? (y / n) ")
+        moreInput = input("Would you like to buy tickets for anyone else? ('y' / 'n') ")
         if moreInput == 'y':
-            userSummary(days, lionCount, eveningCount, penguinCount)
+            userSummary(days, lionCount, penguinCount, eveningCount)
             prevDays = days
             return True
         elif moreInput == 'n':
+            simplify(adultCount, childCount, seniorCount, familyCount, groupAdultCount, groupSeniorCount,
+                     groupChildCount)
             userSummary(days, lionCount, eveningCount, penguinCount)
             days = 0
             prevDays = 0
