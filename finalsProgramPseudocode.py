@@ -152,7 +152,7 @@ def intChecker(text):
     return returnValue
 
 
-# validates an integer value within a specified range
+# validates in integer value within a specified range
 def rangeIntChecker(text, low, high):
     returnValue = 0
     while True:
